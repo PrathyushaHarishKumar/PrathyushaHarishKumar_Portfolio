@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Prathyusha | Developer Portfolio</title>
+
+<style>
+/* ---------- GLOBAL ---------- */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Fira Code", monospace;
+  background: #0d1117;
+  color: #c9d1d9;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---------- LAYOUT ---------- */
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar {
+  width: 240px;
+  background: #161b22;
+  border-right: 1px solid #30363d;
+  padding: 10px;
+}
+
+.sidebar h3 {
+  font-size: 14px;
+  color: #8b949e;
+  margin-bottom: 10px;
+}
+
+.file {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.file:hover {
+  background: #21262d;
+}
+
+.file.active {
+  background: #1f6feb;
+  color: white;
+}
+
+/* ---------- MAIN EDITOR ---------- */
+.editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- TABS ---------- */
+.tabs {
+  display: flex;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+}
+
+.tab {
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #161b22;
+  border-right: 1px solid #30363d;
+}
+
+.tab.active {
+  background: #0d1117;
+  color: #58a6ff;
+}
+
+/* ---------- CONTENT ---------- */
+.content {
+  padding: 30px;
+  overflow-y: auto;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- TERMINAL TEXT ---------- */
+.line {
+  margin: 12px 0;
+  font-size: 18px;
+}
+
+.highlight {
+  font-size: 26px;
+  color: #58a6ff;
+}
+
+.prompt {
+  color: #3fb950;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ---------- CODE STYLE ---------- */
+.code {
+  background: #161b22;
+  padding: 20px;
+  border-radius: 6px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ---------- LINKS ---------- */
+a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h3>EXPLORER</h3>
+    <div class="file active" onclick="loadSection('home')">home.js</div>
+    <div class="file" onclick="loadSection('about')">about.md</div>
+    <div class="file" onclick="loadSection('education')">education.json</div>
+    <div class="file" onclick="loadSection('experience')">experience.js</div>
+    <div class="file" onclick="loadSection('skills')">skills.yaml</div>
+    <div class="file" onclick="loadSection('projects')">projects/</div>
+    <div class="file" onclick="loadSection('certifications')">certifications.txt</div>
+    <div class="file" onclick="loadSection('blog')">blog.md</div>
+    <div class="file" onclick="loadSection('contact')">contact.sh</div>
+  </div>
+
+  <!-- EDITOR -->
+  <div class="editor">
+    <div class="tabs">
+      <div class="tab active" id="tab">home.js</div>
+    </div>
+
+    <div class="content" id="content"></div>
+  </div>
+
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const sections = {
+
+home: `
+<p class="line">Welcome</p>
+<p class="line highlight">I am Prathyusha Harish Kumar</p>
+<p class="line">
+  <span class="prompt">&gt;</span>
+  <span id="typing"></span>
+  <span class="cursor">█</span>
+</p>
+`,
+
+about: `
+<div class="code">
+## About Me
+
+Master’s student in Information Systems with strong expertise in
+Machine Learning, Data Engineering, and scalable backend systems.
+
+I enjoy turning complex data problems into intelligent, impactful solutions.
+</div>
+`,
+
+education: `
+<div class="code">
+{
+  "Masters": {
+    "Degree": "Information Systems",
+    "University": "UMBC",
+    "GPA": "3.8/4"
+  },
+  "Bachelors": {
+    "Degree": "Electronics & Communication Engineering",
+    "University": "VTU",
+    "GPA": "3.8/4"
+  }
+}
+</div>
+`,
+
+experience: `
+<div class="code">
+function experience() {
+  return [
+    "Graduate Student Worker - UMBC",
+    "Research Intern - Health Data Lab",
+    "Software Developer - IBM",
+    "IoT & Embedded Systems Intern"
+  ];
+}
+</div>
+`,
+
+skills: `
+<div class="code">
+programming:
+  - Python
+  - SQL
+  - R
+  - Scala
+
+cloud:
+  - AWS
+  - GCP
+
+ml:
+  - TensorFlow
+  - Scikit-learn
+  - NLP
+</div>
+`,
+
+projects: `
+<div class="code">
+/projects
+├── oncology.sql
+├── lung_cancer_ml.py
+├── smart_farming.ipynb
+└── medical_reco_flask/
+</div>
+`,
+
+certifications: `
+<div class="code">
+- Google AI Essentials
+- Digital Marketing - Google
+- R & LaTeX for Data Analytics
+</div>
+`,
+
+blog: `
+<div class="code">
+$ blog --status
+> Coming soon...
+</div>
+`,
+
+contact: `
+<div class="code">
+$ ./contact.sh
+
+Email: pharish1@umbc.edu
+LinkedIn: linkedin.com/in/prathyusha-h-kumar
+</div>
+`
+};
+
+/* ---------- LOAD SECTION ---------- */
+function loadSection(section) {
+  document.querySelectorAll('.file').forEach(f => f.classList.remove('active'));
+  event.target.classList.add('active');
+
+  document.getElementById("tab").textContent = section;
+  const content = document.getElementById("content");
+  content.innerHTML = sections[section];
+
+  if (section === "home") startTyping();
+}
+
+/* ---------- TYPING EFFECT ---------- */
+function startTyping() {
+  const text = "aspiring Software Engineer | Data & AI Engineer";
+  const typingEl = document.getElementById("typing");
+  if (!typingEl) return;
+
+  typingEl.textContent = "";
+  let i = 0;
+
+  function type() {
+    if (i < text.length) {
+      typingEl.textContent += text[i++];
+      setTimeout(type, 60);
+    }
+  }
+  type();
+}
+
+/* ---------- INIT ---------- */
+loadSection("home");
+</script>
+</body>
+</html>
